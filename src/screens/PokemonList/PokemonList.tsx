@@ -1,14 +1,14 @@
 import { ScrollView, Text } from 'react-native'
-import { useFetchPokemonList } from '../../data/useFetchPokemonList'
+import { useFetchPokemonList } from '../../data/useFetchData'
 import PokemonListItem from './PokemonListItem'
 import { TYPO } from '../../ui/styles'
+import { useState } from 'react'
+import PokemonDetails from '../PokemonDetails'
 
 export default function PokemonList() {
   const { data, isLoading } = useFetchPokemonList()
 
-  const openDetailsPopup = () => {
-    console.log('show pokemon detail')
-  }
+  const { isPopupVisible, openPopup, closePopup, props } = usePopup<{ pokemonUrl: string }>()
 
   return (
     <>
@@ -27,12 +27,27 @@ export default function PokemonList() {
             <PokemonListItem
               key={pokemon?.url ?? index}
               pokemon={pokemon}
-              openDetails={openDetailsPopup}
+              openDetails={() => openPopup({ pokemonUrl: pokemon!.url })}
             />
           ))}
       </ScrollView>
+
+      {isPopupVisible && <PokemonDetails {...props!} closePopup={closePopup} />}
     </>
   )
 }
 
-const placeholders = [1, 2, 3, 4, 5]
+function usePopup<TProps>() {
+  const [props, setProps] = useState<TProps | null>(null)
+
+  return {
+    openPopup: (props: TProps) => {
+      setProps(props)
+    },
+    closePopup: () => {
+      setProps(null)
+    },
+    props,
+    isPopupVisible: props !== null,
+  }
+}

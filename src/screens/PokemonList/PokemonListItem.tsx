@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, View } from 'react-native'
-import { PokemonListDataItem } from '../../data/useFetchPokemonList'
+import { PokemonListDataItem } from '../../data/useFetchData'
 import { capitalizeString } from '../../utils'
 import { TextSkeleton } from '../../ui/skeletons'
 import { TYPO, PRIMARY_COLOR_20 } from '../../ui/styles'
@@ -16,6 +16,7 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
       activeOpacity={0.5}
       style={{ width: '100%', height: HEIGHT, flexDirection: 'row', alignItems: 'center' }}
       onPress={pokemon ? () => openDetails(pokemon.url) : undefined}
+      disabled={pokemon === null}
     >
       <Avatar style={{ marginRight: 8 }} name={pokemon?.name} />
 
