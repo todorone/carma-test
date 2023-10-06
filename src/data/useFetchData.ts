@@ -7,7 +7,7 @@ export type PokemonListDataItem = {
 }
 
 export function useFetchPokemonList() {
-  const [data, setData] = useState<Array<PokemonListDataItem | null>>(() => Array(5).fill(null))
+  const [data, setData] = useState<Array<PokemonListDataItem | null>>(() => Array(8).fill(null))
 
   useEffect(() => {
     fetch(POKEMON_URL)
@@ -25,29 +25,42 @@ export function useFetchPokemonList() {
   return { data }
 }
 
-export type PokemonDetails = {
-  url: string
+export type PokemonDetailsData = {
+  id: number
   name: string
+  posterUrl: string
+  heightDecimeters: number
+  weightHectograms: number
+  abilities: string[]
+}
+
+// TODO Validate with zod and type `serverPayload`
+function processPokemonDetails(serverPayload: any): PokemonDetailsData {
+  return {
+    id: serverPayload.id,
+    name: serverPayload.name,
+    posterUrl: serverPayload.sprites.other.dream_world.front_default,
+    heightDecimeters: serverPayload.height,
+    weightHectograms: serverPayload.weight,
+    abilities: serverPayload.abilities.map((item: any) => item.ability.name),
+  }
 }
 
 export function useFetchPokemonDetails(url: string) {
-  const [data, setData] = useState<Array<PokemonListDataItem | null>>()
-  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState<PokemonDetailsData>()
 
   useEffect(() => {
-    setIsLoading(true)
     fetch(url)
-      .then((res: any) => res.json())
+      .then(res => res.json())
       .then(data => {
         setTimeout(
           () => {
-            setIsLoading(false)
-            setData(data)
+            setData(processPokemonDetails(data))
           },
           IS_EMULATE_SLOW_INTERNET ? 2000 : 0,
         )
       })
   }, [])
 
-  return { data, isLoading }
+  return { data }
 }
