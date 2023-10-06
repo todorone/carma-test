@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, View } from 'react-native'
 import { PokemonListDataItem } from '../../data/useFetchData'
 import { capitalizeString } from '../../utils'
 import { TextSkeleton } from '../../ui/skeletons'
-import { TYPO, PRIMARY_COLOR_20 } from '../../ui/styles'
+import { TYPO, COLOR } from '../../ui/styles'
 import Avatar from '../../ui/Avatar'
 
 type Props = {
@@ -28,7 +28,7 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
           flexDirection: 'row',
           alignItems: 'center',
           borderBottomWidth: 1,
-          borderColor: PRIMARY_COLOR_20,
+          borderColor: COLOR.PRIMARY_20,
         }}
       >
         {pokemon === null ? (

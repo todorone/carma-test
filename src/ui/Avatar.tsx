@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { View, ViewStyle, Image, Text } from 'react-native'
-import { PRIMARY_COLOR } from './styles'
+import { COLOR } from './styles'
 import { Skeleton } from './skeletons'
 
 interface Props {
@@ -15,7 +15,7 @@ function Avatar({ imageUri, name, style, size = SIZE }: Props) {
     width: size,
     height: size,
     borderRadius: size / 2,
-    backgroundColor: PRIMARY_COLOR,
+    backgroundColor: COLOR.PRIMARY,
     alignItems: 'center',
     justifyContent: 'center',
   }

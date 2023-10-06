@@ -6,7 +6,7 @@ import { useState } from 'react'
 import PokemonDetails from '../PokemonDetails'
 
 export default function PokemonList() {
-  const { data, isLoading } = useFetchPokemonList()
+  const { data } = useFetchPokemonList()
 
   const { isPopupVisible, openPopup, closePopup, props } = usePopup<{ pokemonUrl: string }>()
 

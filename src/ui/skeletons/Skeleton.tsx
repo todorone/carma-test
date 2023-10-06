@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 import { Animated, StyleProp, ViewStyle } from 'react-native'
-import { BORDER_RADIUS_MEDIUM, PRIMARY_COLOR } from '../styles'
+import { BORDER_RADIUS_MEDIUM, COLOR } from '../styles'
 import { useSkeletonAnimation } from './useSkeletonAnimation'
 
 interface Props {
@@ -15,7 +15,7 @@ function Skeleton({ style, children }: PropsWithChildren<Props>) {
       style={[
         { borderRadius: BORDER_RADIUS_MEDIUM },
         style,
-        { backgroundColor: PRIMARY_COLOR, opacity },
+        { backgroundColor: COLOR.PRIMARY, opacity },
       ]}
     >
       {children}

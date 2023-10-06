@@ -12,7 +12,7 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
-import { PRIMARY_COLOR_20, WHITE } from './styles'
+import { COLOR } from './styles'
 
 interface Props {
   snapPoints: BottomSheetProps['snapPoints']
@@ -42,7 +42,7 @@ const BottomSheet = forwardRef<RNBottomSheet, PropsWithChildren<Props>>(function
               marginVertical: 10,
               width: 60,
               height: 6,
-              backgroundColor: PRIMARY_COLOR_20,
+              backgroundColor: COLOR.PRIMARY,
               borderRadius: 3,
               alignSelf: 'center',
             }}
@@ -77,7 +77,7 @@ function Backdrop({ animatedIndex }: BottomSheetBackdropProps) {
 }
 
 const styles = StyleSheet.create({
-  background: { backgroundColor: WHITE },
+  background: { backgroundColor: COLOR.WHITE },
 })
 
 export default BottomSheet
