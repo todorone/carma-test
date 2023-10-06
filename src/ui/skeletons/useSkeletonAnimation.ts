@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { Animated } from 'react-native'
+import { Animated, Easing } from 'react-native'
 
 export function useSkeletonAnimation() {
   const opacityValue = useRef(new Animated.Value(OPACITY_FROM)).current
@@ -8,12 +8,13 @@ export function useSkeletonAnimation() {
     Animated.sequence([
       Animated.timing(opacityValue, {
         toValue: OPACITY_TO,
-        duration: 1200,
+        easing: Easing.linear,
+        duration: 1000,
         useNativeDriver: true,
       }),
       Animated.timing(opacityValue, {
         toValue: OPACITY_FROM,
-        duration: 1200,
+        duration: 1000,
         useNativeDriver: true,
       }),
     ]),
@@ -27,5 +28,5 @@ export function useSkeletonAnimation() {
   return opacityValue
 }
 
-const OPACITY_FROM = 0.3
-const OPACITY_TO = 1
+const OPACITY_FROM = 0.2
+const OPACITY_TO = 0.5

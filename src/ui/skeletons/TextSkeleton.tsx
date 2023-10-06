@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
-import { StyleProp, TextStyle, Animated } from 'react-native'
+import { StyleProp, Text, TextStyle, Animated } from 'react-native'
 import { useSkeletonAnimation } from './useSkeletonAnimation'
-import { PRIMARY_COLOR, BORDER_RADIUS_MEDIUM } from '../styles'
+import { PRIMARY_COLOR, BORDER_RADIUS_SMALL } from '../styles'
 
 interface Props {
   style?: StyleProp<TextStyle>
@@ -11,15 +11,11 @@ function TextSkeleton({ style, children }: PropsWithChildren<Props>) {
   const opacity = useSkeletonAnimation()
 
   return (
-    <Animated.Text
-      style={[
-        { backgroundColor: PRIMARY_COLOR, opacity, borderRadius: BORDER_RADIUS_MEDIUM },
-        style,
-        { color: '#00000000' },
-      ]}
+    <Animated.View
+      style={{ backgroundColor: PRIMARY_COLOR, opacity, borderRadius: BORDER_RADIUS_SMALL }}
     >
-      {children}
-    </Animated.Text>
+      <Text style={[style, { color: '#00000000' }]}>{children}</Text>
+    </Animated.View>
   )
 }
 

@@ -20,7 +20,9 @@ function Avatar({ imageUri, name, style, size = SIZE }: Props) {
     justifyContent: 'center',
   }
 
-  if (imageUri === undefined && name === undefined) return <Skeleton style={containerStyle} />
+  if (imageUri === undefined && name === undefined) {
+    return <Skeleton style={style ? [containerStyle, style] : containerStyle} />
+  }
 
   return (
     <View style={style ? [containerStyle, style] : containerStyle}>
