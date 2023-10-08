@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { PokemonListDataItem } from '../../data/useFetchData'
 import { capitalizeString } from '../../utils'
@@ -15,23 +15,13 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
-      style={{ width: '100%', height: HEIGHT, flexDirection: 'row', alignItems: 'center' }}
+      style={styles.container}
       onPress={pokemon ? () => openDetails(pokemon.url) : undefined}
       disabled={pokemon === null}
     >
-      <Avatar style={{ marginRight: 8 }} name={pokemon?.name} />
+      <Avatar style={styles.avatar} name={pokemon?.name} />
 
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          paddingLeft: 8,
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderColor: COLOR.PRIMARY_20,
-        }}
-      >
+      <View style={styles.content}>
         {pokemon === null ? (
           <TextSkeleton style={TYPO.H4}>Pokemon name</TextSkeleton>
         ) : (
@@ -42,6 +32,20 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
   )
 }
 
+export default PokemonListItem
+
 const HEIGHT = 55
 
-export default PokemonListItem
+const styles = StyleSheet.create({
+  container: { width: '100%', height: HEIGHT, flexDirection: 'row', alignItems: 'center' },
+  avatar: { marginRight: 8 },
+  content: {
+    width: '100%',
+    height: '100%',
+    paddingLeft: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: COLOR.PRIMARY_20,
+  },
+})

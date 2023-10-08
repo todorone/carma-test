@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 import { useFetchPokemonList } from '../../data/useFetchData'
 import PokemonListItem from './PokemonListItem'
 import { TYPO } from '../../ui/styles'
 import PokemonDetails from '../PokemonDetails'
-import { usePopup } from '../../utils'
+import { usePopup, noop } from '../../utils'
 import { TextInput } from '../../ui/TextInput'
 
-export default function PokemonList() {
+function PokemonList() {
   const [searchValue, setSearchValue] = useState('')
+  const isSearchApplied = searchValue.length > 2
 
   let pokemonsData = useFetchPokemonList()
 
-  if (searchValue.length > 2) {
+  if (isSearchApplied) {
     pokemonsData = pokemonsData.filter(pokemon => {
       if (pokemon === null) return true
 
@@ -27,11 +28,11 @@ export default function PokemonList() {
   const { isPopupVisible, openPopup, closePopup, props } = usePopup<{ pokemonUrl: string }>()
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 20 }}>
-      <Text style={{ marginVertical: 5, ...TYPO.H1 }}>Pokemon Squad</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Pokemon Squad</Text>
 
       <TextInput
-        style={{ marginVertical: 10, width: '100%' }}
+        style={styles.searchInput}
         placeholder={'Search...'}
         left={<Text style={TYPO.H4}>👀 </Text>}
         value={searchValue}
@@ -39,26 +40,25 @@ export default function PokemonList() {
         clearButtonMode={'always'}
       />
 
-      <ScrollView
-        style={{ flex: 1, backgroundColor: '#fff' }}
-        contentContainerStyle={{ paddingBottom: 50 }}
-      >
-        {pokemonsData &&
+      <ScrollView style={styles.list} contentContainerStyle={styles.listContainer}>
+        {pokemonsData !== undefined &&
           pokemonsData.map((pokemon, index) => (
             <PokemonListItem
               key={pokemon?.url ?? index}
               pokemon={pokemon}
-              openDetails={() => {
-                openPopup({ pokemonUrl: pokemon!.url })
-                setSearchValue('')
-              }}
+              openDetails={
+                pokemon !== null
+                  ? () => {
+                      openPopup({ pokemonUrl: pokemon.url })
+                      setSearchValue('')
+                    }
+                  : noop
+              }
             />
           ))}
 
-        {pokemonsData && pokemonsData.length === 0 && searchValue.length > 2 && (
-          <Text style={{ marginTop: 50, alignSelf: 'center', ...TYPO.TEXT_BIG }}>
-            Nothing found...🧐
-          </Text>
+        {pokemonsData !== undefined && pokemonsData.length === 0 && isSearchApplied && (
+          <Text style={styles.notFound}>Nothing found...🧐</Text>
         )}
       </ScrollView>
 
@@ -66,3 +66,14 @@ export default function PokemonList() {
     </View>
   )
 }
+
+export default PokemonList
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingHorizontal: 20 },
+  title: { marginVertical: 5, ...TYPO.H1 },
+  searchInput: { marginVertical: 10, width: '100%' },
+  list: { flex: 1 },
+  listContainer: { paddingBottom: 50 },
+  notFound: { marginTop: 50, alignSelf: 'center', ...TYPO.TEXT_BIG },
+})

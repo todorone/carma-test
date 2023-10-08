@@ -21,3 +21,5 @@ export function capitalizeString(value: string) {
 }
 
 export const sleep = (durationMs: number) => new Promise(resolve => setTimeout(resolve, durationMs))
+
+export const noop = () => {}
