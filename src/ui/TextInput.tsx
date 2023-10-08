@@ -1,6 +1,6 @@
 import React, { createRef, PureComponent, ReactElement } from 'react'
 import { TextInput as RNTextInput, TextInputProps, ViewStyle, StyleSheet, View } from 'react-native'
-import { BORDER_RADIUS_SMALL, COLOR, isAndroid } from './styles'
+import { BORDER_RADIUS_SMALL, COLOR } from './styles'
 
 interface Props {
   inputStyle?: ViewStyle
@@ -24,9 +24,9 @@ export class TextInput extends PureComponent<Props & TextInputProps, State> {
   onBlur = () => this.setState({ isFocused: false })
 
   render() {
-    const { style, inputStyle, left, right, errorMessage, ...restProps } = this.props
+    const { style, inputStyle, left, right, ...restProps } = this.props
 
-    const borderColor = this.state.isFocused ? COLOR.PRIMARY_60 : UNFOCUSED_BORDER_COLOR
+    const borderColor = this.state.isFocused ? COLOR.PRIMARY_80 : COLOR.LIGHT_GREY
 
     return (
       <>
@@ -35,10 +35,8 @@ export class TextInput extends PureComponent<Props & TextInputProps, State> {
             styles.container,
             style,
             {
-              opacity: restProps.editable === false ? 0.5 : 1,
               borderColor,
               borderWidth: 2,
-              backgroundColor: COLOR.LIGHTEST_GREY,
               marginBottom: style?.marginBottom,
             },
           ]}
@@ -48,8 +46,9 @@ export class TextInput extends PureComponent<Props & TextInputProps, State> {
           <RNTextInput
             ref={this.input}
             style={[styles.input, inputStyle]}
-            placeholderTextColor={COLOR.GREY}
-            selectionColor={COLOR.PRIMARY}
+            placeholderTextColor={COLOR.LIGHT_GREY}
+            selectionColor={COLOR.PRIMARY_80}
+            cursorColor={COLOR.PRIMARY_80}
             underlineColorAndroid={'transparent'}
             clearTextOnFocus={false}
             onFocus={this.onFocus}
@@ -63,10 +62,6 @@ export class TextInput extends PureComponent<Props & TextInputProps, State> {
     )
   }
 }
-
-// This is due to the difference in the way RN handles border painting over
-// background color on iOS / Android
-const UNFOCUSED_BORDER_COLOR = isAndroid ? COLOR.WHITE_08 : 'transparent'
 
 export const TEXT_INPUT_HEIGHT = 48
 

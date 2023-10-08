@@ -14,6 +14,7 @@ const WHITE = '#FFFFFF'
 export const COLOR = {
   BLACK: '#0D0F23',
   GREY: '#A0A1B4',
+  LIGHT_GREY: '#D6D6D6',
   LIGHTEST_GREY: '#F7F7F8',
   WHITE,
   WHITE_80: WHITE + 'CC',
