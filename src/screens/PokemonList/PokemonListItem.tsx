@@ -34,10 +34,8 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
 
 export default PokemonListItem
 
-const HEIGHT = 55
-
 const styles = StyleSheet.create({
-  container: { width: '100%', height: HEIGHT, flexDirection: 'row', alignItems: 'center' },
+  container: { width: '100%', height: 55, flexDirection: 'row', alignItems: 'center' },
   avatar: { marginRight: 8 },
   content: {
     width: '100%',
