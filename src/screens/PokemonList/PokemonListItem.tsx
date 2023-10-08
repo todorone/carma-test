@@ -1,4 +1,5 @@
-import { TouchableOpacity, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { PokemonListDataItem } from '../../data/useFetchData'
 import { capitalizeString } from '../../utils'
 import { TextSkeleton } from '../../ui/skeletons'

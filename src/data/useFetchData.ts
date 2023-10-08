@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { POKEMON_URL, IS_EMULATE_SLOW_INTERNET } from './constants'
 
+// TODO this is very naive fetch/caching implementation, substitute with React Query
+
 export type PokemonListDataItem = {
   url: string
   name: string
@@ -47,15 +49,21 @@ function processPokemonDetails(serverPayload: any): PokemonDetailsData {
 }
 
 export function useFetchPokemonDetails(url: string) {
-  const [data, setData] = useState<PokemonDetailsData>()
+  const [data, setData] = useState<PokemonDetailsData | undefined>(() =>
+    pokemonDetailsCache.get(url),
+  )
 
   useEffect(() => {
+    if (data !== undefined) return
+
     fetch(url)
       .then(res => res.json())
       .then(data => {
         setTimeout(
           () => {
-            setData(processPokemonDetails(data))
+            const result = processPokemonDetails(data)
+            setData(result)
+            pokemonDetailsCache.set(url, result)
           },
           IS_EMULATE_SLOW_INTERNET ? 2000 : 0,
         )
@@ -64,3 +72,5 @@ export function useFetchPokemonDetails(url: string) {
 
   return { data }
 }
+
+const pokemonDetailsCache = new Map<string, PokemonDetailsData>()

@@ -16,7 +16,6 @@ function PokemonDetails({ pokemonUrl, closePopup }: Props) {
   const bottomSheet = useRef<BottomSheetRef>(null)
 
   const { data: pokemon } = useFetchPokemonDetails(pokemonUrl)
-  console.log('>> pokemon', pokemon)
 
   const itemTitleStyle: TextStyle = { ...TYPO.H3, marginTop: 10 }
   const posterStyle: ImageStyle = { alignSelf: 'center', width: 280, height: 280 }
@@ -26,7 +25,12 @@ function PokemonDetails({ pokemonUrl, closePopup }: Props) {
       <BottomSheet ref={bottomSheet} snapPoints={snapPoints} onClose={closePopup}>
         <View style={{ paddingHorizontal: 20, alignItems: 'flex-start' }}>
           {pokemon ? (
-            <Image source={{ uri: pokemon.posterUrl }} contentFit={'contain'} style={posterStyle} />
+            <Image
+              source={{ uri: pokemon.posterUrl }}
+              contentFit={'contain'}
+              transition={200}
+              style={posterStyle}
+            />
           ) : (
             <Skeleton style={posterStyle} />
           )}

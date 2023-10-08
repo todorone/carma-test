@@ -1,16 +1,25 @@
 // Border radius
-import { TextStyle } from 'react-native'
+import { TextStyle, Platform } from 'react-native'
+
+export const isAndroid = Platform.OS === 'android'
 
 export const BORDER_RADIUS_SMALL = 8
 export const BORDER_RADIUS_MEDIUM = 12
-export const BORDER_RADIUS_BIG = 16
+export const BORDER_RADIUS_LARGE = 16
 
 // Colors
 const PRIMARY = '#1979FF'
+const WHITE = '#FFFFFF'
 
 export const COLOR = {
   BLACK: '#0D0F23',
-  WHITE: '#FFFFFF',
+  GREY: '#A0A1B4',
+  LIGHTEST_GREY: '#F7F7F8',
+  WHITE,
+  WHITE_80: WHITE + 'CC',
+  WHITE_60: WHITE + '99',
+  WHITE_20: WHITE + '33',
+  WHITE_08: WHITE + '14',
   PRIMARY,
   PRIMARY_80: PRIMARY + 'CC',
   PRIMARY_60: PRIMARY + '99',
