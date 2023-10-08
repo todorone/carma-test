@@ -1,20 +1,21 @@
+import { useState } from 'react'
 import { Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+
 import { useFetchPokemonList } from '../../data/useFetchData'
 import PokemonListItem from './PokemonListItem'
 import { TYPO } from '../../ui/styles'
 import PokemonDetails from '../PokemonDetails'
 import { usePopup } from '../../utils'
-import { useState } from 'react'
 import { TextInput } from '../../ui/TextInput'
 
 export default function PokemonList() {
   const [searchValue, setSearchValue] = useState('')
 
-  let { data: pokemons } = useFetchPokemonList()
+  let pokemonsData = useFetchPokemonList()
 
   if (searchValue.length > 2) {
-    pokemons = pokemons.filter(pokemon => {
+    pokemonsData = pokemonsData.filter(pokemon => {
       if (pokemon === null) return true
 
       if (pokemon.name.toLowerCase().includes(searchValue.toLowerCase())) return true
@@ -42,8 +43,8 @@ export default function PokemonList() {
         style={{ flex: 1, backgroundColor: '#fff' }}
         contentContainerStyle={{ paddingBottom: 50 }}
       >
-        {pokemons &&
-          pokemons.map((pokemon, index) => (
+        {pokemonsData &&
+          pokemonsData.map((pokemon, index) => (
             <PokemonListItem
               key={pokemon?.url ?? index}
               pokemon={pokemon}
@@ -54,7 +55,7 @@ export default function PokemonList() {
             />
           ))}
 
-        {pokemons && pokemons.length === 0 && searchValue.length > 2 && (
+        {pokemonsData && pokemonsData.length === 0 && searchValue.length > 2 && (
           <Text style={{ marginTop: 50, alignSelf: 'center', ...TYPO.TEXT_BIG }}>
             Nothing found...🧐
           </Text>

@@ -1,32 +1,35 @@
 import { useState, useEffect } from 'react'
 import { POKEMON_URL, IS_EMULATE_SLOW_INTERNET } from './constants'
+import { sleep } from '../utils'
 
 // TODO this is very naive fetch/caching implementation, substitute with React Query
-
+// === Pokemon list ===
 export type PokemonListDataItem = {
   url: string
   name: string
 }
 
 export function useFetchPokemonList() {
+  // initialising with placeholders data
   const [data, setData] = useState<Array<PokemonListDataItem | null>>(() => Array(8).fill(null))
 
   useEffect(() => {
-    fetch(POKEMON_URL)
-      .then(res => res.json())
-      .then(data => {
-        setTimeout(
-          () => {
-            setData(data.results)
-          },
-          IS_EMULATE_SLOW_INTERNET ? 2000 : 0,
-        )
-      })
+    async function fetchPokemonList() {
+      const response = await fetch(POKEMON_URL)
+      const data = await response.json()
+
+      if (IS_EMULATE_SLOW_INTERNET) await sleep(2000)
+
+      setData(data.results)
+    }
+
+    fetchPokemonList()
   }, [])
 
-  return { data }
+  return data
 }
 
+// === Pokemon details ===
 export type PokemonDetailsData = {
   id: number
   name: string
@@ -56,21 +59,22 @@ export function useFetchPokemonDetails(url: string) {
   useEffect(() => {
     if (data !== undefined) return
 
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        setTimeout(
-          () => {
-            const result = processPokemonDetails(data)
-            setData(result)
-            pokemonDetailsCache.set(url, result)
-          },
-          IS_EMULATE_SLOW_INTERNET ? 2000 : 0,
-        )
-      })
+    async function fetchPokemon() {
+      const response = await fetch(url)
+      const data = await response.json()
+
+      if (IS_EMULATE_SLOW_INTERNET) await sleep(2000)
+
+      const processedData = processPokemonDetails(data)
+      setData(processedData)
+
+      pokemonDetailsCache.set(url, processedData)
+    }
+
+    fetchPokemon()
   }, [])
 
-  return { data }
+  return data
 }
 
 const pokemonDetailsCache = new Map<string, PokemonDetailsData>()

@@ -15,7 +15,7 @@ type Props = {
 function PokemonDetails({ pokemonUrl, closePopup }: Props) {
   const bottomSheet = useRef<BottomSheetRef>(null)
 
-  const { data: pokemon } = useFetchPokemonDetails(pokemonUrl)
+  const pokemonData = useFetchPokemonDetails(pokemonUrl)
 
   const itemTitleStyle: TextStyle = { ...TYPO.H3, marginTop: 10 }
   const posterStyle: ImageStyle = { alignSelf: 'center', width: 280, height: 280 }
@@ -24,45 +24,47 @@ function PokemonDetails({ pokemonUrl, closePopup }: Props) {
     <View style={StyleSheet.absoluteFillObject}>
       <BottomSheet ref={bottomSheet} snapPoints={snapPoints} onClose={closePopup}>
         <View style={{ paddingHorizontal: 20, alignItems: 'flex-start' }}>
-          {pokemon ? (
+          {pokemonData ? (
             <Image
-              source={{ uri: pokemon.posterUrl }}
+              source={{ uri: pokemonData.posterUrl }}
               contentFit={'contain'}
-              transition={200}
+              transition={150}
               style={posterStyle}
             />
           ) : (
             <Skeleton style={posterStyle} />
           )}
 
-          {pokemon ? (
+          {pokemonData ? (
             <Text style={itemTitleStyle}>
-              Name: <Text style={TYPO.TEXT_BIG}>{capitalizeString(pokemon.name)}</Text>
+              Name: <Text style={TYPO.TEXT_BIG}>{capitalizeString(pokemonData.name)}</Text>
             </Text>
           ) : (
             <TextSkeleton style={itemTitleStyle}>Name: Pikachu</TextSkeleton>
           )}
 
-          {pokemon ? (
+          {pokemonData ? (
             <Text style={itemTitleStyle}>
-              Height: <Text style={TYPO.TEXT_BIG}>{pokemon.heightDecimeters} decimeters</Text>
+              Height: <Text style={TYPO.TEXT_BIG}>{pokemonData.heightDecimeters} decimeters</Text>
             </Text>
           ) : (
             <TextSkeleton style={itemTitleStyle}>Height: 5 decimeter</TextSkeleton>
           )}
 
-          {pokemon ? (
+          {pokemonData ? (
             <Text style={itemTitleStyle}>
-              Weight: <Text style={TYPO.TEXT_BIG}>{pokemon.weightHectograms} hectograms</Text>
+              Weight: <Text style={TYPO.TEXT_BIG}>{pokemonData.weightHectograms} hectograms</Text>
             </Text>
           ) : (
             <TextSkeleton style={itemTitleStyle}>Weight: 30 hectogram</TextSkeleton>
           )}
 
-          {pokemon ? (
+          {pokemonData ? (
             <Text style={itemTitleStyle}>
               Abilities:{' '}
-              <Text style={TYPO.TEXT_BIG}>{pokemon.abilities.join(', ').replaceAll('-', ' ')}</Text>
+              <Text style={TYPO.TEXT_BIG}>
+                {pokemonData.abilities.join(', ').replaceAll('-', ' ')}
+              </Text>
             </Text>
           ) : (
             <TextSkeleton style={itemTitleStyle}>Abilities: some, other, another</TextSkeleton>
