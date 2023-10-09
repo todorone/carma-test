@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { View, StyleSheet, Text, TextStyle } from 'react-native'
-import { Image, ImageStyle } from 'expo-image'
+import { View, StyleSheet, Text } from 'react-native'
+import { Image } from 'expo-image'
 import BottomSheet, { BottomSheetRef } from '../../ui/BottomSheet'
 import { PokemonListDataItem } from '../PokemonList/useFetchPokemonList'
 import { TYPO } from '../../ui/styles'
@@ -13,37 +13,32 @@ type Props = {
 function PokemonDetails({ pokemon, closePopup }: Props) {
   const bottomSheet = useRef<BottomSheetRef>(null)
 
-  const itemTitleStyle: TextStyle = { ...TYPO.H3, marginTop: 10 }
-  const posterStyle: ImageStyle = { alignSelf: 'center', width: 280, height: 280 }
-
   return (
     <View style={StyleSheet.absoluteFillObject}>
       <BottomSheet ref={bottomSheet} snapPoints={snapPoints} onClose={closePopup}>
-        <View style={{ paddingHorizontal: 20, alignItems: 'flex-start' }}>
+        <View style={styles.body}>
           <Image
             source={{ uri: pokemon.posterUrl }}
             contentFit={'contain'}
             transition={150}
-            style={posterStyle}
+            style={styles.poster}
           />
 
-          <Text style={itemTitleStyle}>
+          <Text style={styles.itemTitle}>
             Name: <Text style={TYPO.TEXT_BIG}>{pokemon.name}</Text>
           </Text>
 
-          <Text style={itemTitleStyle}>
+          <Text style={styles.itemTitle}>
             Height: <Text style={TYPO.TEXT_BIG}>{pokemon.heightDecimeters} decimeters</Text>
           </Text>
 
-          <Text style={itemTitleStyle}>
+          <Text style={styles.itemTitle}>
             Weight: <Text style={TYPO.TEXT_BIG}>{pokemon.weightHectograms} hectograms</Text>
           </Text>
 
-          <Text style={itemTitleStyle}>
+          <Text style={styles.itemTitle}>
             Abilities:{' '}
-            <Text style={TYPO.TEXT_BIG}>
-              {/*{pokemon.abilities.join(', ').replaceAll('-', ' ')}*/}
-            </Text>
+            <Text style={TYPO.TEXT_BIG}>{pokemon.abilities.join(', ').replaceAll('-', ' ')}</Text>
           </Text>
         </View>
       </BottomSheet>
@@ -54,3 +49,9 @@ function PokemonDetails({ pokemon, closePopup }: Props) {
 const snapPoints = [550]
 
 export default PokemonDetails
+
+const styles = StyleSheet.create({
+  body: { paddingHorizontal: 20, alignItems: 'flex-start' },
+  poster: { marginVertical: 10, alignSelf: 'center', width: 280, height: 280 },
+  itemTitle: { ...TYPO.H3, marginTop: 10 },
+})

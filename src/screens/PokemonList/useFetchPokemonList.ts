@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { GRAPHQL_URL, IS_EMULATE_SLOW_INTERNET } from './constants'
 import { sleep, capitalizeString } from '../../utils'
 
-// TODO this is very naive fetch/caching implementation, substitute with React Query
-// === Pokemon list ===
+const GRAPHQL_URL = 'https://beta.pokeapi.co/graphql/v1beta'
+const IS_EMULATE_SLOW_INTERNET = true
+
+// TODO this is very naive fetch implementation, substitute with React Query
 export type PokemonListDataItem = {
   id: number
   name: string
@@ -11,13 +12,13 @@ export type PokemonListDataItem = {
   posterUrl: string
   heightDecimeters: number
   weightHectograms: number
-  // abilities: string[]
+  abilities: string[]
 }
 
 function processPokemonList(payload: any): PokemonListDataItem[] {
   return payload.data.pokemon_v2_pokemon.map((pokemon: any) => {
     const sprites = JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites)
-    console.log('sprites', sprites)
+
     return {
       id: pokemon.id,
       name: capitalizeString(pokemon.name),
@@ -33,24 +34,49 @@ function processPokemonList(payload: any): PokemonListDataItem[] {
       ),
       heightDecimeters: pokemon.height,
       weightHectograms: pokemon.weight,
-      // abilities: serverPayload.abilities.map((item: any) => item.ability.name),
+      abilities: pokemon.pokemon_v2_pokemonabilities.map(
+        (item: any) => item.pokemon_v2_ability.name,
+      ),
     }
   })
 }
 
+const PAGE_SIZE = 15
+
+const query = `
+query PokemonList($offset: Int) {
+  pokemon_v2_pokemon(limit: ${PAGE_SIZE}, offset: $offset) {
+    name
+    id
+    height
+    weight
+    pokemon_v2_pokemonsprites {
+      id
+      sprites
+    }
+    pokemon_v2_pokemonitems(limit: 3) {
+      id
+    }
+    pokemon_v2_pokemonabilities {
+      pokemon_v2_ability {
+        name
+      }
+    }
+  }
+}`
+
 export function useFetchPokemonList() {
   // initialising with placeholders data
-  const [data, setData] = useState<Array<PokemonListDataItem | null>>(() => Array(8).fill(null))
+  const [data, setData] = useState<Array<PokemonListDataItem | null> | undefined>()
 
   useEffect(() => {
-    async function fetchPokemonList() {
+    async function fetchPokemonList(offset = 0) {
       const response = await fetch(GRAPHQL_URL, {
         method: 'post',
         body: JSON.stringify({
-          query:
-            'query samplePokeAPIquery {\n  pokemon_v2_pokemon(limit: 10) {\n    name\n    id\n    height\n    weight\n    pokemon_v2_pokemonsprites {\n      id\n      sprites\n    }\n    pokemon_v2_pokemonitems(limit: 3) {\n      pokemon_v2_item {\n        name\n        id\n        cost\n      }\n      id\n    }\n  }\n}\n',
-          variables: null,
-          operationName: 'samplePokeAPIquery',
+          query,
+          variables: { offset },
+          operationName: 'PokemonList',
         }),
       })
       const data = await response.json()
@@ -60,6 +86,7 @@ export function useFetchPokemonList() {
       setData(processPokemonList(data))
     }
 
+    // TODO Add infinite fetching
     fetchPokemonList()
   }, [])
 

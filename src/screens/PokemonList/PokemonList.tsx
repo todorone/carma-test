@@ -4,8 +4,8 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 import { useFetchPokemonList, PokemonListDataItem } from './useFetchPokemonList'
 import PokemonListItem from './PokemonListItem'
-import { TYPO } from '../../ui/styles'
 import PokemonDetails from '../PokemonDetails'
+import { TYPO } from '../../ui/styles'
 import { usePopup, noop } from '../../utils'
 import { TextInput } from '../../ui/TextInput'
 
@@ -13,7 +13,7 @@ function PokemonList() {
   const [searchValue, setSearchValue] = useState('')
   const isSearchApplied = searchValue.length > 2
 
-  let pokemonsData = useFetchPokemonList()
+  let pokemonsData = useFetchPokemonList() ?? placeholdersData
 
   if (isSearchApplied) {
     pokemonsData = pokemonsData.filter(pokemon => {
@@ -68,6 +68,8 @@ function PokemonList() {
     </View>
   )
 }
+
+const placeholdersData = Array(8).fill(null)
 
 export default PokemonList
 
