@@ -1,14 +1,13 @@
 import { Text, View, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { PokemonListDataItem } from '../../data/useFetchData'
-import { capitalizeString } from '../../utils'
+import { PokemonListDataItem } from './useFetchPokemonList'
 import { TextSkeleton } from '../../ui/skeletons'
 import { TYPO, COLOR } from '../../ui/styles'
 import Avatar from '../../ui/Avatar'
 
 type Props = {
   pokemon: PokemonListDataItem | null
-  openDetails: (pokemonUrl: string) => void
+  openDetails: (pokemon: PokemonListDataItem) => void
 }
 
 function PokemonListItem({ openDetails, pokemon }: Props) {
@@ -16,16 +15,16 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
     <TouchableOpacity
       activeOpacity={0.5}
       style={styles.container}
-      onPress={pokemon ? () => openDetails(pokemon.url) : undefined}
+      onPress={pokemon ? () => openDetails(pokemon) : undefined}
       disabled={pokemon === null}
     >
-      <Avatar style={styles.avatar} name={pokemon?.name} />
+      <Avatar style={styles.avatar} name={pokemon?.name} imageUri={pokemon?.avatarUrl} />
 
       <View style={styles.content}>
         {pokemon === null ? (
           <TextSkeleton style={TYPO.H4}>Pokemon name</TextSkeleton>
         ) : (
-          <Text style={TYPO.H4}>{capitalizeString(pokemon.name)}</Text>
+          <Text style={TYPO.H4}>{pokemon.name}</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -35,7 +34,7 @@ function PokemonListItem({ openDetails, pokemon }: Props) {
 export default PokemonListItem
 
 const styles = StyleSheet.create({
-  container: { width: '100%', height: 55, flexDirection: 'row', alignItems: 'center' },
+  container: { width: '100%', height: 60, flexDirection: 'row', alignItems: 'center' },
   avatar: { marginRight: 8 },
   content: {
     width: '100%',

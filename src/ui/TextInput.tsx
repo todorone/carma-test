@@ -26,7 +26,7 @@ export class TextInput extends PureComponent<Props & TextInputProps, State> {
   render() {
     const { style, inputStyle, left, right, ...restProps } = this.props
 
-    const borderColor = this.state.isFocused ? COLOR.PRIMARY_80 : COLOR.LIGHT_GREY
+    const borderColor = this.state.isFocused ? COLOR.PRIMARY_80 : COLOR.PRIMARY_20
 
     return (
       <>

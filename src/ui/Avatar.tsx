@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { View, ViewStyle, Image, Text } from 'react-native'
+import { View, ViewStyle, Text } from 'react-native'
+import { Image } from 'expo-image'
 import { COLOR } from './styles'
 import { Skeleton } from './skeletons'
 
@@ -15,7 +16,7 @@ function Avatar({ imageUri, name, style, size = SIZE }: Props) {
     width: size,
     height: size,
     borderRadius: size / 2,
-    backgroundColor: COLOR.PRIMARY,
+    backgroundColor: imageUri ? COLOR.PRIMARY_08 : COLOR.PRIMARY,
     alignItems: 'center',
     justifyContent: 'center',
   }
@@ -29,6 +30,7 @@ function Avatar({ imageUri, name, style, size = SIZE }: Props) {
       {imageUri ? (
         <Image
           style={{ width: size, height: size, borderRadius: size / 2 }}
+          transition={50}
           source={{ uri: imageUri }}
         />
       ) : (
@@ -38,6 +40,6 @@ function Avatar({ imageUri, name, style, size = SIZE }: Props) {
   )
 }
 
-const SIZE = 40
+const SIZE = 50
 
 export default memo(Avatar)

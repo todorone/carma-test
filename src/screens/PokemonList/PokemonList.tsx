@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
-import { useFetchPokemonList } from '../../data/useFetchData'
+import { useFetchPokemonList, PokemonListDataItem } from './useFetchPokemonList'
 import PokemonListItem from './PokemonListItem'
 import { TYPO } from '../../ui/styles'
 import PokemonDetails from '../PokemonDetails'
@@ -25,7 +25,9 @@ function PokemonList() {
     })
   }
 
-  const { isPopupVisible, openPopup, closePopup, props } = usePopup<{ pokemonUrl: string }>()
+  const { isPopupVisible, openPopup, closePopup, props } = usePopup<{
+    pokemon: PokemonListDataItem
+  }>()
 
   return (
     <View style={styles.container}>
@@ -44,12 +46,12 @@ function PokemonList() {
         {pokemonsData !== undefined &&
           pokemonsData.map((pokemon, index) => (
             <PokemonListItem
-              key={pokemon?.url ?? index}
+              key={pokemon?.id ?? index}
               pokemon={pokemon}
               openDetails={
                 pokemon !== null
                   ? () => {
-                      openPopup({ pokemonUrl: pokemon.url })
+                      openPopup({ pokemon })
                       setSearchValue('')
                     }
                   : noop
