@@ -1,17 +1,15 @@
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { StatusBar } from 'expo-status-bar'
-
-import PokemonList from './src/screens/PokemonList'
-import { COLOR } from './src/ui/styles'
+import Home from './src/Home'
 
 export default function App() {
   return (
     <GestureHandlerRootView style={styles.flexOne}>
-      <StatusBar translucent={false} backgroundColor={COLOR.WHITE} />
+      <StatusBar translucent={false} backgroundColor={'#fff'} />
 
       <SafeAreaView style={styles.flexOne}>
-        <PokemonList />
+        <Home />
       </SafeAreaView>
     </GestureHandlerRootView>
   )
